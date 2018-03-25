@@ -2,7 +2,7 @@
 
 A simple scientific calculator with the following features:
 
-    The calculator addition, subtraction, multiplication, division, log on floating point numbers.
+    The calculator supports addition, subtraction, multiplication, division, log on floating point numbers.
     The calculator can solve simple linear equations with a single variable (namely, x or y), for simplicity, only addition, subtraction and multiplication operations are allowed.
     The calculator supports parentheses in both modes.
     The calculator should have a language parser.

@@ -13,16 +13,29 @@ import winsound
 # define test vectors as follows
 # [expected result, arg1(optional), arg2(optional)]
 testVectors=[
-     ['10.0'        ,'10'          ], 
-     ['Simple Scientific'          ], 
-     ['5.0'         ,'2+3'         ], 
-     ['-5.0'        ,' -2+-3  '    ], 
-     ['10.0'        ,' 2+2*2*2  '  ], 
-     ['6.0'         ,'-  2+2*2*2  '],
-     ['14.666666667','2(22)/3  '   ], 
-     ['2.302585093' ,'log(10)'     ],
-     [' '           ,'((('     ],
-     ['Too many'    ,  '**', '2+3' ] 
+     
+     [(
+       'log (2)\n'+
+       '   ^\n'+
+       'Error: Expecting opening bracket of log function at positoin 4'
+      ),
+       'log (2)'],
+            
+     [(
+       'Simple Scientific Calculator\n'+
+       'USAGE:    scalc [math expression]\n'+
+       'Example:  scalc (2+3)*6' 
+      )],
+       
+          
+       
+     ['10.0'        ,'   10'          ], 
+     ['5.0'         ,'  2+3  '        ], 
+     ['-5.0'        ,'    -2+-3  '    ], 
+     ['10.0'        ,' 2+2* 2 *2  '   ], 
+     ['6.0'         ,'-  2+2*2* 2  '  ],
+     ['14.666666667','2( 22  )/3  '   ], 
+     ['2.302585093' ,'log(10)'        ],
      
     ]
 
@@ -42,13 +55,9 @@ for testVector in testVectors:
     
     result=scalc.scalc()
 
-    if narg==2: #test if result exactly matches the expectation
-        if expectedResult==result:
-            testSucceeded=True
-    else: # test if result contains the necessary substring
-        if expectedResult in result:
-            testSucceeded=True
-            expectedResult=expectedResult+'..' 
+
+    if expectedResult==result:
+        testSucceeded=True
     
     if testSucceeded:
         msg='OK' 
@@ -56,8 +65,8 @@ for testVector in testVectors:
         msg='ERROR!!!'
         winsound.Beep(600, 250)
 
-    print('\nArguments    '+str(arguments))
-    print('Result       '+result+'.')
-    print('Expected     '+expectedResult+'.')
-    print(msg)
+    print('\nArguments    \n'+str(arguments))
+    print('\nResult       \n'+result+'.')
+    print('\nExpected     \n'+expectedResult+'.')
+    print('\n'+msg+'\n\n\n')
     
