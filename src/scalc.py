@@ -29,7 +29,7 @@ def assess(string):
             EqualSignPos=i
         if string[i] in 'xy':
             if Variable in 'xy' and string[i]!=Variable:
-                raise Error('Seen variable "'+Variable+'" already, but an extra variable "'+string[i]+'" found',i)
+                raise Error('Seen "'+Variable+'" already, but an extra variable "'+string[i]+'" found',i)
             Variable=string[i]
         
     
@@ -183,10 +183,13 @@ def evaluate(string,stringPosition):
     decimalFound=False
     for i in range(len(string)):
         if string[i] not in '0123456789.':
-            raise Error('Expecting a number',stringPosition+i)
+            raise Error('Expecting a number or a decimal point',stringPosition+i)
         if string[i]=='.':
             if decimalFound==True:
-                raise Error('Unexpected (extra) decimal point',stringPosition+i)
+                raise Error('Unexpected decimal point',stringPosition+i)
+            decimalFound=True
+            if len(string)==1:
+                raise Error('Expecting a number',stringPosition+i+1)
     
     return polynomial([float(string)])
     
@@ -199,7 +202,7 @@ def helpText():
            'Simple Scientific Calculator\n'+
            'USAGE:    scalc [math expression]\n'+
            'Supported functions: +,-,*,/,log\n'+
-           'Supported variables: x,y\n' +
+           'Supported variables: single x or y\n' +
            'Supported equations type: linear\n' +
            'Examples:  scalc (2+3)*6, scalc x+10=12-x, scalc "y(y+y)y*log(10)"\n'
            )
@@ -214,11 +217,11 @@ def scalc():
         if narg==1:
             output=helpText()
         elif narg>2:
-            raise Error('Error: Too many command line arguments',-1)
+            raise Error('Error: Too many command line arguments. Remove spaces or use doublequotes (e.g. scalc "1  +  2")',-1)
         else:
             output = assess(args[1])
     except Error as e:
-        #raise e # uncomment the line if need to debug the code
+        
         if e.position<0:
             output = str(e.message)
         else:
@@ -226,7 +229,7 @@ def scalc():
             output = ( args[1]+'\n'+
                       space+'^\n'+
                       'Error: '+ str(e.message)+' at position '+str(e.position+1) )
-                      
+        #raise e # uncomment the line if need to debug the code              
             
     return output
 

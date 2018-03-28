@@ -68,7 +68,7 @@ class polynomial():
    
     def log(self):
         if self.degree>0:
-            raise Exception('Can not take log from a polinome')
+            raise Exception('Can not take log from a polynomial')
         if self.coef[0]<=0:
             raise Exception('Log from a non-positive argument')
         coef=math.log(self.coef[0])
@@ -130,4 +130,16 @@ class polynomial():
     def __repr__(self):
         return self.string()    
     
+    def __eq__(self,other):
+        
+        if self.degree!=other.degree:
+            return False
+        else:
+            i=0
+            while i<=self.degree:
+                if abs(self.coef[i]-other.coef[i])>0.0000000001: 
+                    return False
+                i=i+1
+            return True
+        
         
