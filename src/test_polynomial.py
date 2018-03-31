@@ -19,6 +19,8 @@ class TestPolynomial(unittest.TestCase):
         self.assertFalse(p1==p3)
         self.assertFalse(p1!=p2)
         self.assertTrue(p1!=p3)
+        
+
     
     def test_string(self):
         P1=polynomial([10])
@@ -63,7 +65,6 @@ class TestPolynomial(unittest.TestCase):
     
     def test_umin(self):
         self.assertEqual(polynomial([1,1]).umin(),polynomial([-1,-1]))
-
 
 
 if __name__ == '__main__':

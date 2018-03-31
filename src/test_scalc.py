@@ -17,10 +17,10 @@ class TestScalc(unittest.TestCase):
         
         sys.argv=['scalc','10']
         self.assertEqual(scalc(),'10')
-  
+   
         sys.argv=['scalc','11.3']
         self.assertEqual(scalc(),'11.3')
-        
+      
         sys.argv=['scalc','-2.3']
         self.assertEqual(scalc(),'-2.3')
         
@@ -35,7 +35,8 @@ class TestScalc(unittest.TestCase):
         
         sys.argv=['scalc','.']
         self.assertEqual(scalc(),'.\n ^\nError: Expecting a number at position 2')
-        
+
+    
     def test_variable(self):
         
         sys.argv=['scalc','x']
@@ -48,8 +49,10 @@ class TestScalc(unittest.TestCase):
         self.assertEqual(scalc(),'z\n^\nError: Unrecognised character "z" at position 1')
         
         sys.argv=['scalc','l']
-        self.assertEqual(scalc(),'l\n^\nError: Expecting a number or a decimal point at position 1')
-        
+        self.assertEqual(scalc(),'l\n^\nError: Expression expected at position 1')
+     
+ 
+    
     def test_addition(self):
         sys.argv=['scalc','1+1']
         self.assertEqual(scalc(),'2')
@@ -63,7 +66,7 @@ class TestScalc(unittest.TestCase):
         sys.argv=['scalc','x++x']
         self.assertEqual(scalc(),'x++x\n  ^\nError: Expression expected at position 3')
         
-        
+          
     
     def test_subtraction(self):
         
@@ -79,7 +82,7 @@ class TestScalc(unittest.TestCase):
         sys.argv=['scalc','x--x']
         self.assertEqual(scalc(),'x--x\n  ^\nError: Expression expected at position 3')
         
-        
+    
     
     def test_multiplication(self):
         
@@ -95,7 +98,8 @@ class TestScalc(unittest.TestCase):
         
         sys.argv=['scalc','2**3']
         self.assertEqual(scalc(),'2**3\n  ^\nError: Expression expected at position 3')
-        
+    
+           
   
     def test_division(self):
         
@@ -114,7 +118,7 @@ class TestScalc(unittest.TestCase):
         sys.argv=['scalc','100/x']
         self.assertEqual(scalc(),'100/x\n   ^\nError: Non-zero reminder while dividing polynomials at position 4')
   
-    
+       
     def test_log(self):
         
         sys.argv=['scalc','log(10)']
@@ -128,7 +132,7 @@ class TestScalc(unittest.TestCase):
   
         sys.argv=['scalc','log(y)']
         self.assertEqual(scalc(),'log(y)\n    ^\nError: Can not take log from a polynomial at position 5')
-  
+    
     def test_umin(self):
         
         sys.argv=['scalc','-20']
@@ -139,7 +143,7 @@ class TestScalc(unittest.TestCase):
   
         sys.argv=['scalc','--x']
         self.assertEqual(scalc(),'--x\n ^\nError: Expression expected at position 2')
-  
+    
     def test_uplus(self):
         
         sys.argv=['scalc','+20']
@@ -167,10 +171,10 @@ class TestScalc(unittest.TestCase):
         self.assertEqual(scalc(),'((x\n   ^\nError: Expecting closing bracket at position 4')
         
         sys.argv=['scalc',')10(']
-        self.assertEqual(scalc(),')10(\n^\nError: Unexpected closing bracket at position 1')
+        self.assertEqual(scalc(),')10(\n^\nError: Expression expected at position 1')
         
         sys.argv=['scalc','12)']
-        self.assertEqual(scalc(),'12)\n  ^\nError: Unexpected closing bracket at position 3')
+        self.assertEqual(scalc(),'12)\n  ^\nError: Unexpected expression at position 3')
     
     
     def test_expressions(self):
@@ -210,7 +214,7 @@ class TestScalc(unittest.TestCase):
         self.assertEqual(scalc(),'True')
         
         sys.argv=['scalc','2*2==4']
-        self.assertEqual(scalc(),'2*2==4\n    ^\nError: An extra "=" character found at position 5')
+        self.assertEqual(scalc(),'2*2==4\n    ^\nError: Expression expected at position 5')
         
         sys.argv=['scalc','(x=4)']
         self.assertEqual(scalc(),'(x=4)\n  ^\nError: Expecting closing bracket at position 3')
@@ -224,7 +228,7 @@ class TestScalc(unittest.TestCase):
         sys.argv=['scalc','x=y']
         self.assertEqual(scalc(),'x=y\n  ^\nError: Seen "x" already, but an extra variable "y" found at position 3')
        
-        
+       
         
     def test_errors(self):
         
@@ -235,10 +239,11 @@ class TestScalc(unittest.TestCase):
         self.assertEqual(scalc(),'x()*x/(6)\n  ^\nError: Expression expected at position 3')
   
         sys.argv=['scalc','yyy']
-        self.assertEqual(scalc(),'yyy\n ^\nError: Unexpected character after a variable "y" at position 2')
+        self.assertEqual(scalc(),'yyy\n ^\nError: Unexpected expression at position 2')
         
         sys.argv=['scalc','x','2']
         self.assertEqual(scalc(),'Error: Too many command line arguments. Remove spaces or use doublequotes (e.g. scalc "1  +  2")')
+    
         
         
     def test_help(self):
@@ -250,10 +255,9 @@ class TestScalc(unittest.TestCase):
       'Supported functions: +,-,*,/,log\n'+
       'Supported variables: single x or y\n' +
       'Supported equations type: linear\n' +
-      'Examples:  scalc (2+3)*6, scalc x+10=12-x, scalc "y(y+y)y*log(10)"\n'
+      'Examples: scalc (2+3)*6, scalc "x = log(12)-x"\n'
       )
         self.assertEqual(scalc(),expectedText)
-  
         
 if __name__ == '__main__':
     unittest.main()
