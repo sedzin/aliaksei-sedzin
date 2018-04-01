@@ -45,9 +45,7 @@ For example the following distribution can be used:
 Please refer to the installation instructions of the development environment itself.
 Copy the source files in a working directory.
 The calculator can be run from the development environment terminal by using the following command
-```
-run scalc 
-```
+``` run scalc ```
 For example
 ```
 run scalc 2+2
@@ -78,5 +76,4 @@ Run test_scalc.py and the tests should run automatically.
 
 ## Authors
 
-* **Alex Sedzin** 
-
+* **Alex Sedzin**
