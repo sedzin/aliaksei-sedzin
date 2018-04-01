@@ -45,26 +45,16 @@ For example the following distribution can be used:
 Please refer to the installation instructions of the development environment itself.
 Copy the source files in a working directory.
 The calculator can be run from the development environment terminal by using the following command
-```
-run scalc 
-```
+```run scalc```
 For example
-```
-run scalc 2+2
-```
+```run scalc 2+2```
 should produce the following output
-```
-4
-```
+```4```
 
 And running 
-```
-run scalc "(x+1)(x+1)=x"
-```
+```run scalc "(x+1)(x+1)=x*x"```
 should produce
-```
-x = 0.5
-```
+```x = -0.5```
 
 ## Running the tests
 
