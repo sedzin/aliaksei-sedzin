@@ -16,10 +16,8 @@ class Parser:
         self.spaceCharacters=' \t'
         self.string = string
         
-       
         self.i = 0
         self.variable = ''
-        self.isEquation = False
         
     def getCurrent(self)    :
         return self.string[self.i:self.i+1] or '#'
@@ -41,7 +39,7 @@ class Parser:
     def checkInput(self):
         # sanity check input string
         for j in range(len(self.string)):
-            if self.string[j] not in '1234567890.-+*/()log='+self.allowedVariables+self.spaceCharacters:
+            if self.string[j] not in '0123456789.e-+*/()log='+self.allowedVariables+self.spaceCharacters:
                 raise Error('Unrecognised character "'+self.string[j]+'"',j)
         
     def evaluate(self):
@@ -49,38 +47,26 @@ class Parser:
         result=self.parseEquation()
         if self.hasCurrent():
             raise Error('Unexpected expression',self.i)
-            
-        if self.isEquation:
-            solution=result.solve()
-            if self.variable !='': # variables found; try to solve
-                return self.variable+'='+str(solution)
-            else: # no variables; check if the equation is an identity
-                if str(result)=='0':
-                    return 'True'
-                else:
-                    return 'False'
-            
-        else: # we deal with an expression
-            output=str(result)
-            output=output.replace('x',self.variable)
-            return output
+        return result
             
     def parseEquation(self):
         result = self.parseExpression()
-        while True:
-            self.skipSpaces()
-            if self.getCurrent()=='=':
-                if self.isEquation==True:
-                    raise Error('An extra = sign found',self.i)
-                self.isEquation=True
-                self.advance()
-                result=result.sub(self.parseExpression())
-            else:
-                break
+        self.skipSpaces()
+        if self.getCurrent()=='=': # we deal with an equation
+            self.advance()
+            result=result.sub(self.parseExpression())        
+            
+            if self.variable: # variables found; return a solution
+                return self.variable+' = '+result.solve()
+            else: # no variables; check if the equation is an identity
+                if result.iszero():
+                    return 'True'
+                else:
+                    return 'False'        
+        else: # we deal with an expression
+            return str(result).replace('x',self.variable)
+            
         
-        #if self.isEquation
-        return result
-
     def parseExpression(self):
         return self.parseAddAndSub()
         
@@ -114,7 +100,7 @@ class Parser:
             #implicit multiplication         
             elif ( ( self.getPrevious() in '0123456789)' and self.getCurrent() in '(l'+self.allowedVariables) or
             (self.getPrevious() in self.allowedVariables and self.getCurrent() in '(') or
-            (self.getPrevious() in ')' and self.getCurrent() in '01234567890.') ):
+            (self.getPrevious() in ')' and self.getCurrent() in '0123456789.') ):
 
                 result=result.mul(self.parseBrackets())
             
@@ -149,7 +135,7 @@ class Parser:
             pos=self.i
             if not self.hasCurrent() or self.getCurrent()!='(':
                raise Error('Expecting opening bracket of log function',self.i)
-            r=self.parseExpression()
+            r=self.parseBrackets()
             try:
                 return r.log()
             except Exception as e:
@@ -162,7 +148,7 @@ class Parser:
             char=self.getCurrent()
             self.advance()
             self.skipSpaces()
-            if self.getCurrent() in '(01234567890l.'+self.allowedVariables:
+            if self.getCurrent() in '(0123456789l.'+self.allowedVariables:
                 p=self.parseBrackets()
                 if char=='-':
                     return p.umin()
@@ -185,19 +171,35 @@ class Parser:
     def parseNumbers(self):
         self.skipSpaces()
         decimalFound=False
+      
         numberString=''
-        while self.getCurrent() in '01234567890.':
+        while self.getCurrent() in '0123456789.':
             if self.getCurrent()=='.':
-                if decimalFound==True:
+                if decimalFound:
                     raise Error('Unexpected decimal point',self.i)
                 decimalFound=True
             numberString +=self.getCurrent()
             self.advance()
-
+        
         if numberString=='.':
             raise Error('Expecting a number',self.i)
-            
+      
         if numberString=='':
             raise Error('Expression expected',self.i)
+            
+        #process exponent
+        if self.getCurrent()=='e':
+            numberString +=self.getCurrent()
+            self.advance()
+            if self.getCurrent() in '+-':
+                numberString +=self.getCurrent()
+                self.advance()
+            if self.getCurrent() in '0123456789':
+                
+                while self.getCurrent() in '0123456789':
+                    numberString +=self.getCurrent()
+                    self.advance()
+            else:
+                raise Error('Expecting a number',self.i)
             
         return polynomial([float(numberString)])

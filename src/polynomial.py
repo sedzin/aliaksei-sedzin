@@ -8,6 +8,9 @@ import math
 
 class polynomial():
     
+    precisionDigits=9
+    precision=0.1**precisionDigits
+    
     def __init__(self,coef=[0]):
         self.degree=len(coef)-1
         self.coef=coef
@@ -15,13 +18,13 @@ class polynomial():
         
     def iszero(self):
         for i in range(self.degree+1):
-            if self.coef[i]!=0:
+            if abs(self.coef[i])>=self.precision:
                 return False
         return True 
     
     def findDegree(self):
         d=len(self.coef)-1
-        while d>0 and self.coef[d]==0:
+        while d>0 and abs(self.coef[d])<self.precision:
             d-=1
         self.coef=self.coef[0:d+1]
         self.degree=d   
@@ -87,7 +90,7 @@ class polynomial():
             return 'None (no solution exists)'
         
         
-        return polynomial([-self.coef[0]/self.coef[1]])
+        return str(polynomial([-self.coef[0]/self.coef[1]]) )
     
     
     
@@ -99,7 +102,7 @@ class polynomial():
         
         # 
             for i in range(self.degree+1):
-                c=round(self.coef[i],9)
+                c=round(self.coef[i],self.precisionDigits)
                 if c==int(c):
                     c=int(c)
                 if c!=0 or self.degree==0:
@@ -122,6 +125,8 @@ class polynomial():
                 
             if sign=='-':
                 s='-'+s
+        if s=='': #all coefficients are very small, so s is empty
+            s='0'
         return s
 
     def __str__(self):
@@ -137,7 +142,7 @@ class polynomial():
         else:
             i=0
             while i<=self.degree:
-                if abs(self.coef[i]-other.coef[i])>0.0000000001: 
+                if abs(self.coef[i]-other.coef[i])>self.precision: 
                     return False
                 i=i+1
             return True

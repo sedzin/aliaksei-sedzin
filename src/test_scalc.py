@@ -5,7 +5,6 @@ Created on Thu Mar 22 16:00:23 2018
 @author: Alex
 """
 
-
 import unittest
 import sys
 from scalc import scalc     
@@ -123,6 +122,10 @@ class TestScalc(unittest.TestCase):
         
         sys.argv=['scalc','log(10)']
         self.assertEqual(scalc(),'2.302585093')
+        
+        sys.argv=['scalc','log(10)*x']
+        self.assertEqual(scalc(),'2.302585093x')
+        
   
         sys.argv=['scalc','log(-2)']
         self.assertEqual(scalc(),'log(-2)\n    ^\nError: Log from a non-positive argument at position 5')
@@ -199,13 +202,13 @@ class TestScalc(unittest.TestCase):
     def test_equations(self):
         
         sys.argv=['scalc','x=10']
-        self.assertEqual(scalc(),'x=10')
+        self.assertEqual(scalc(),'x = 10')
   
         sys.argv=['scalc','x(x+1)=x']
-        self.assertEqual(scalc(),'x=0')
+        self.assertEqual(scalc(),'x = 0')
   
         sys.argv=['scalc','(y-1)(y+1)=y*y-1']
-        self.assertEqual(scalc(),'y=Any (any value is a valid solution)')
+        self.assertEqual(scalc(),'y = Any (any value is a valid solution)')
         
         sys.argv=['scalc','2=3']
         self.assertEqual(scalc(),'False')
@@ -244,6 +247,18 @@ class TestScalc(unittest.TestCase):
         sys.argv=['scalc','x','2']
         self.assertEqual(scalc(),'Error: Too many command line arguments. Remove spaces or use doublequotes (e.g. scalc "1  +  2")')
     
+    
+    def test_examples(self):
+        
+        sys.argv=['scalc','(3+(4-1))*5']
+        self.assertEqual(scalc(),'30')
+  
+        sys.argv=['scalc','2 * x + 0.5 = 1']
+        self.assertEqual(scalc(),'x = 0.25')
+  
+        sys.argv=['scalc','2x + 1 = 2(1-x)']
+        self.assertEqual(scalc(),'x = 0.25')
+  
         
         
     def test_help(self):
