@@ -38,7 +38,7 @@ def scalc():
               
     except Error as e:
         space=' '*e.position
-        output= (string+'\n'+space+'^\n'+'Error: '+ str(e.message)+' at position '+str(e.position+1) )
+        output= (string+'\n'+space+'^\n'+'Error: '+str(e.message)+' at position '+str(e.position+1) )
         return output
 
 

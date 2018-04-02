@@ -19,8 +19,6 @@ class TestPolynomial(unittest.TestCase):
         self.assertFalse(p1==p3)
         self.assertFalse(p1!=p2)
         self.assertTrue(p1!=p3)
-        
-
     
     def test_string(self):
         P1=polynomial([10])

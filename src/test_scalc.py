@@ -26,6 +26,9 @@ class TestScalc(unittest.TestCase):
         sys.argv=['scalc','-.3']
         self.assertEqual(scalc(),'-0.3')
   
+        sys.argv=['scalc','2e3']
+        self.assertEqual(scalc(),'2000')
+   
         sys.argv=['scalc','-2..3']
         self.assertEqual(scalc(),'-2..3\n   ^\nError: Unexpected decimal point at position 4')
         
@@ -50,9 +53,9 @@ class TestScalc(unittest.TestCase):
         sys.argv=['scalc','l']
         self.assertEqual(scalc(),'l\n^\nError: Expression expected at position 1')
      
- 
-    
+     
     def test_addition(self):
+        
         sys.argv=['scalc','1+1']
         self.assertEqual(scalc(),'2')
   
@@ -65,8 +68,7 @@ class TestScalc(unittest.TestCase):
         sys.argv=['scalc','x++x']
         self.assertEqual(scalc(),'x++x\n  ^\nError: Expression expected at position 3')
         
-          
-    
+              
     def test_subtraction(self):
         
         sys.argv=['scalc','10-.1']
@@ -81,8 +83,7 @@ class TestScalc(unittest.TestCase):
         sys.argv=['scalc','x--x']
         self.assertEqual(scalc(),'x--x\n  ^\nError: Expression expected at position 3')
         
-    
-    
+        
     def test_multiplication(self):
         
         sys.argv=['scalc','2*3.1']
@@ -97,8 +98,7 @@ class TestScalc(unittest.TestCase):
         
         sys.argv=['scalc','2**3']
         self.assertEqual(scalc(),'2**3\n  ^\nError: Expression expected at position 3')
-    
-           
+
   
     def test_division(self):
         
@@ -126,7 +126,6 @@ class TestScalc(unittest.TestCase):
         sys.argv=['scalc','log(10)*x']
         self.assertEqual(scalc(),'2.302585093x')
         
-  
         sys.argv=['scalc','log(-2)']
         self.assertEqual(scalc(),'log(-2)\n    ^\nError: Log from a non-positive argument at position 5')
   
@@ -136,6 +135,7 @@ class TestScalc(unittest.TestCase):
         sys.argv=['scalc','log(y)']
         self.assertEqual(scalc(),'log(y)\n    ^\nError: Can not take log from a polynomial at position 5')
     
+
     def test_umin(self):
         
         sys.argv=['scalc','-20']
@@ -147,6 +147,7 @@ class TestScalc(unittest.TestCase):
         sys.argv=['scalc','--x']
         self.assertEqual(scalc(),'--x\n ^\nError: Expression expected at position 2')
     
+
     def test_uplus(self):
         
         sys.argv=['scalc','+20']
@@ -196,8 +197,7 @@ class TestScalc(unittest.TestCase):
     
         sys.argv=['scalc','(y+9)(y+10)(y+10)/(y+10)']
         self.assertEqual(scalc(),'y^2+19y+90')
-    
-    
+     
   
     def test_equations(self):
         
@@ -230,8 +230,7 @@ class TestScalc(unittest.TestCase):
        
         sys.argv=['scalc','x=y']
         self.assertEqual(scalc(),'x=y\n  ^\nError: Seen "x" already, but an extra variable "y" found at position 3')
-       
-       
+             
         
     def test_errors(self):
         
@@ -259,8 +258,7 @@ class TestScalc(unittest.TestCase):
         sys.argv=['scalc','2x + 1 = 2(1-x)']
         self.assertEqual(scalc(),'x = 0.25')
   
-        
-        
+    
     def test_help(self):
         
         sys.argv=['scalc']

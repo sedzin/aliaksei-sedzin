@@ -63,6 +63,7 @@ class polynomial():
             raise Exception('Non-zero reminder while dividing polynomials')
         return q
     
+    # unary minus
     def umin(self):
         coef=[0]*(self.degree+1)
         for i in range(self.degree+1):
@@ -76,8 +77,7 @@ class polynomial():
             raise Exception('Log from a non-positive argument')
         coef=math.log(self.coef[0])
         return polynomial([coef])
-    
-    
+       
     def solve(self):
         if self.degree>1:
             if self.coef[0]==0:
@@ -88,19 +88,14 @@ class polynomial():
             return 'Any (any value is a valid solution)'
         if self.degree==0 and self.coef[0]!=0:
             return 'None (no solution exists)'
-        
-        
-        return str(polynomial([-self.coef[0]/self.coef[1]]) )
+               
+        return str(polynomial([-self.coef[0]/self.coef[1]]) )      
     
-    
-    
+    # convert into a string like "3x^2-3x+1"
     def string(self):
         s=''
-        sign=''
-    
+        sign=''   
         if self.degree>=0:
-        
-        # 
             for i in range(self.degree+1):
                 c=round(self.coef[i],self.precisionDigits)
                 if c==int(c):

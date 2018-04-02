@@ -10,12 +10,11 @@ from polynomial import polynomial
 from error import Error
 
 class Parser:
+    
     def __init__(self,string):
-        
         self.allowedVariables='xyabcd'
         self.spaceCharacters=' \t'
         self.string = string
-        
         self.i = 0
         self.variable = ''
         
@@ -56,7 +55,7 @@ class Parser:
             self.advance()
             result=result.sub(self.parseExpression())        
             
-            if self.variable: # variables found; return a solution
+            if self.variable: # variables were found; return a solution
                 return self.variable+' = '+result.solve()
             else: # no variables; check if the equation is an identity
                 if result.iszero():
@@ -64,9 +63,9 @@ class Parser:
                 else:
                     return 'False'        
         else: # we deal with an expression
+            # convert the result into string and replace "x" with the actual variable
             return str(result).replace('x',self.variable)
             
-        
     def parseExpression(self):
         return self.parseAddAndSub()
         
@@ -79,8 +78,7 @@ class Parser:
                 self.advance()
                 self.skipSpaces()
                 if self.getCurrent() in '+-':
-                    raise Error('Expression expected',self.i)
-            
+                    raise Error('Expression expected',self.i)           
             if char=='+':
                 result=result.add(self.parseMulAndDiv())
             elif char=='-':
@@ -93,6 +91,8 @@ class Parser:
         result = self.parseBrackets()
         while True:
             self.skipSpaces()
+            
+            #multiplication
             if self.getCurrent()=='*':
                 self.advance()
                 result=result.mul(self.parseBrackets())
@@ -104,6 +104,7 @@ class Parser:
 
                 result=result.mul(self.parseBrackets())
             
+            # division
             elif self.getCurrent()=='/':
                 pos=self.i
                 self.advance()
@@ -170,9 +171,10 @@ class Parser:
     
     def parseNumbers(self):
         self.skipSpaces()
-        decimalFound=False
-      
         numberString=''
+
+        #process significand
+        decimalFound=False
         while self.getCurrent() in '0123456789.':
             if self.getCurrent()=='.':
                 if decimalFound:
@@ -183,7 +185,6 @@ class Parser:
         
         if numberString=='.':
             raise Error('Expecting a number',self.i)
-      
         if numberString=='':
             raise Error('Expression expected',self.i)
             
@@ -201,5 +202,6 @@ class Parser:
                     self.advance()
             else:
                 raise Error('Expecting a number',self.i)
-            
+        
+        #numberString should be in a legal format at this point
         return polynomial([float(numberString)])
